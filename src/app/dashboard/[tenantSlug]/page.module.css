@@ -1,0 +1,15 @@
+/* src/app/dashboard/[tenantSlug]/page.module.css */
+.dashboardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.statCard {
+  @apply card;
+  border-left: 4px solid var(--primary);
+}
+
+.statCard .icon {
+  @apply w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center;
+}
