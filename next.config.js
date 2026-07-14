@@ -3,11 +3,10 @@ const nextConfig = {
   images: {
     domains: ['firebasestorage.googleapis.com', 'lh3.googleusercontent.com'],
   },
-  // للإنتاج (Static Export) نفعله لاحقاً، اتركه كما هو للتطوير
   experimental: {
     optimizeCss: true,
   },
-  // دعم الترجمة (i18n) نضيفه لاحقاً
+  // i18n will be handled by the app router
 };
 
 module.exports = nextConfig;
