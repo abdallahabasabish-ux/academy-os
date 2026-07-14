@@ -4,33 +4,26 @@ import { getFirestore, enableIndexedDbPersistence } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { getMessaging } from 'firebase/messaging';
 
-// 1. قراءة المتغيرات من ملف .env.local
+// Firebase configuration with real keys
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  apiKey: "AIzaSyD8q05OB-2URf_5z59UD0NBKoA3NXaxncs",
+  authDomain: "academy-os-314c0.firebaseapp.com",
+  projectId: "academy-os-314c0",
+  storageBucket: "academy-os-314c0.firebasestorage.app",
+  messagingSenderId: "790267436938",
+  appId: "1:790267436938:web:bcbace45e788569cc5b273"
 };
 
-// 2. التحقق من وجود المتغيرات (تجنب الأخطاء الغامضة)
-if (!firebaseConfig.apiKey) {
-  throw new Error('❌ Firebase: Missing environment variables. Check your .env.local file.');
-}
-
-// 3. تهيئة التطبيق (مرة واحدة فقط)
+// Initialize Firebase app (singleton pattern)
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
-// 4. تصدير الخدمات الأساسية
+// Export Firebase services
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
-
-// 5. (اختياري) تهيئة Messaging فقط في المتصفح
 export const messaging = typeof window !== 'undefined' ? getMessaging(app) : null;
 
-// 6. إعداد بقاء المصادقة محلياً وتفعيل التخزين المؤقت لـ Firestore
+// Enable offline persistence and auth persistence
 if (typeof window !== 'undefined') {
   setPersistence(auth, browserLocalPersistence);
   
