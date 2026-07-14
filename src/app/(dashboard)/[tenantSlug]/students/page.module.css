@@ -1,0 +1,570 @@
+/* ============================================
+   صفحة الطلاب - الأنماط الخاصة
+   ============================================ */
+
+/* --- حاوية الصفحة الرئيسية --- */
+.pageContainer {
+  padding: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* --- رأس الصفحة --- */
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.pageHeader h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.pageHeader p {
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+/* --- بطاقات الإحصائيات --- */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.statCard {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.statCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.statCard .statValue {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.statCard .statLabel {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-top: 0.25rem;
+}
+
+.statCard .statIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  background: #eef2ff;
+  color: #4f46e5;
+}
+
+/* --- ألوان خاصة ببطاقات الإحصائيات --- */
+.statCard.total .statValue { color: #4f46e5; }
+.statCard.active .statValue { color: #16a34a; }
+.statCard.pending .statValue { color: #ca8a04; }
+.statCard.suspended .statValue { color: #dc2626; }
+
+/* --- أدوات البحث والتصفية --- */
+.filtersBar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .filtersBar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.searchWrapper {
+  position: relative;
+  flex: 1;
+  max-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .searchWrapper {
+    max-width: 400px;
+  }
+}
+
+.searchWrapper input {
+  width: 100%;
+  padding: 0.6rem 1rem 0.6rem 2.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  background: white;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+.searchWrapper input:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.searchWrapper .searchIcon {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.searchWrapper .clearButton {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  transition: color 0.2s;
+}
+
+.searchWrapper .clearButton:hover {
+  color: #475569;
+}
+
+.filtersGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filtersGroup select,
+.filtersGroup button {
+  padding: 0.6rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  outline: none;
+}
+
+.filtersGroup select:focus,
+.filtersGroup button:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.filtersGroup select:hover,
+.filtersGroup button:hover {
+  background: #f8fafc;
+}
+
+.filtersGroup .clearAllBtn {
+  color: #64748b;
+}
+
+.filtersGroup .clearAllBtn:hover {
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #fecaca;
+}
+
+/* --- جدول الطلاب --- */
+.tableWrapper {
+  background: white;
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.tableWrapper table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.tableWrapper thead {
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.tableWrapper thead th {
+  padding: 0.75rem 1rem;
+  text-align: right;
+  font-weight: 600;
+  color: #475569;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.tableWrapper tbody tr {
+  border-bottom: 1px solid #f1f5f9;
+  transition: background-color 0.15s;
+}
+
+.tableWrapper tbody tr:last-child {
+  border-bottom: none;
+}
+
+.tableWrapper tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.tableWrapper tbody td {
+  padding: 0.75rem 1rem;
+  vertical-align: middle;
+}
+
+/* --- عمود الطالب (الاسم والصورة) --- */
+.studentCell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.studentAvatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  background: #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: #475569;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.studentAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.studentName {
+  font-weight: 500;
+  color: #0f172a;
+}
+
+.studentPhone {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-top: 0.1rem;
+}
+
+/* --- حالة الطالب (Badge) --- */
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  gap: 0.35rem;
+  white-space: nowrap;
+}
+
+.statusBadge .statusDot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  display: inline-block;
+}
+
+.statusBadge.active {
+  background: #dcfce7;
+  color: #166534;
+}
+.statusBadge.active .statusDot {
+  background: #22c55e;
+}
+
+.statusBadge.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+.statusBadge.pending .statusDot {
+  background: #f59e0b;
+}
+
+.statusBadge.suspended {
+  background: #fee2e2;
+  color: #991b1b;
+}
+.statusBadge.suspended .statusDot {
+  background: #ef4444;
+}
+
+/* --- أزرار الإجراءات --- */
+.actionsCell {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.actionBtn {
+  padding: 0.4rem;
+  border: none;
+  background: transparent;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+}
+
+.actionBtn:hover {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.actionBtn.view:hover {
+  background: #eef2ff;
+  color: #4f46e5;
+}
+
+.actionBtn.edit:hover {
+  background: #eef2ff;
+  color: #4f46e5;
+}
+
+.actionBtn.delete:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.actionBtn.activate:hover {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.actionBtn.suspend:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* --- قائمة منسدلة (Dropdown) للإجراءات الإضافية --- */
+.dropdownWrapper {
+  position: relative;
+}
+
+.dropdownMenu {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  margin-top: 0.25rem;
+  background: white;
+  border-radius: 0.5rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  min-width: 160px;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.dropdownMenu button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border: none;
+  background: transparent;
+  text-align: right;
+  font-size: 0.85rem;
+  color: #334155;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.dropdownMenu button:hover {
+  background: #f1f5f9;
+}
+
+.dropdownMenu button.danger {
+  color: #dc2626;
+}
+
+.dropdownMenu button.danger:hover {
+  background: #fee2e2;
+}
+
+/* --- حالة عدم وجود طلاب (Empty State) --- */
+.emptyState {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  background: white;
+  border-radius: 0.75rem;
+  border: 2px dashed #e2e8f0;
+}
+
+.emptyState .emptyIcon {
+  width: 4rem;
+  height: 4rem;
+  color: #cbd5e1;
+  margin: 0 auto 1rem;
+}
+
+.emptyState h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.emptyState p {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+.emptyState .addBtn {
+  margin-top: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.5rem;
+  background: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  text-decoration: none;
+}
+
+.emptyState .addBtn:hover {
+  background: #4338ca;
+}
+
+/* --- شاشة التحميل (Loading) --- */
+.loadingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+}
+
+.loadingSpinner {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 3px solid #e2e8f0;
+  border-top-color: #4f46e5;
+  border-radius: 9999px;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* --- استجابة للشاشات الصغيرة (موبايل) --- */
+@media (max-width: 640px) {
+  .pageContainer {
+    padding: 0.75rem;
+  }
+
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  .statCard {
+    padding: 0.75rem;
+  }
+
+  .statCard .statValue {
+    font-size: 1.25rem;
+  }
+
+  .tableWrapper {
+    overflow-x: auto;
+  }
+
+  .tableWrapper table {
+    font-size: 0.8rem;
+    min-width: 600px;
+  }
+
+  .tableWrapper thead th,
+  .tableWrapper tbody td {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .studentAvatar {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.75rem;
+  }
+
+  .filtersBar {
+    gap: 0.5rem;
+  }
+
+  .filtersGroup select,
+  .filtersGroup button {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .searchWrapper input {
+    padding: 0.5rem 0.75rem 0.5rem 2.25rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* --- استجابة للأجهزة المتوسطة (تابلت) --- */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .statsGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* --- دعم الوضع الداكن (جاهز للتفعيل لاحقاً) --- */
+@media (prefers-color-scheme: dark) {
+  /* سيتم تفعيلها عند إضافة نظام الوضع الداكن */
+}
+
+/* --- دعم RTL (العربية) --- */
+[dir="rtl"] .searchWrapper .searchIcon {
+  right: auto;
+  left: 0.75rem;
+}
+
+[dir="rtl"] .searchWrapper .clearButton {
+  left: auto;
+  right: 0.75rem;
+}
+
+[dir="rtl"] .dropdownMenu {
+  left: auto;
+  right: 0;
+}
