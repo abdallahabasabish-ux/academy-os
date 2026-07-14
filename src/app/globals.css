@@ -1,17 +1,9 @@
-/* src/app/globals.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* إعادة تعيين أساسية */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+@import '../styles/components.css';
 
 :root {
-  /* الألوان الأساسية (يمكن تغييرها بسهولة) */
   --primary: #2563EB;
   --secondary: #0F172A;
   --success: #22C55E;
@@ -19,20 +11,13 @@
   --danger: #EF4444;
   --background: #F8FAFC;
   --foreground: #0F172A;
-  
-  /* الظلال */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-feature-settings: "rlig" 1, "calt" 1;
 }
 
-/* التمرير السلس */
 html {
   scroll-behavior: smooth;
 }
