@@ -34,12 +34,9 @@ export default function RegisterPage() {
     setError(null);
     try {
       const result = await authService.register(data);
-      console.log('✅ Registration successful!', result);
-      // بعد التسجيل الناجح، نوجه إلى لوحة التحكم (سننشئها لاحقاً)
       router.push(`/dashboard/${result.slug}`);
     } catch (err: any) {
-      console.error(err);
-      setError(err.message || 'حدث خطأ أثناء التسجيل. حاول مرة أخرى.');
+      setError(err.message || 'حدث خطأ أثناء التسجيل');
     } finally {
       setIsLoading(false);
     }
