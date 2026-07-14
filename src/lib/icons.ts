@@ -1,4 +1,4 @@
-// src/lib/icons.ts
+// Re-export all common icons from lucide-react for convenience
 export { 
   Home, 
   Users, 
@@ -33,5 +33,19 @@ export {
   Check,
   AlertCircle,
   Info,
-  Loader2
+  Loader2,
+  Eye,
+  FileText,
+  PlayCircle,
+  UserPlus,
+  CheckCircle,
+  XCircle,
+  ArrowLeft,
+  Globe,
+  GraduationCap,
+  MessageSquare,
+  ShoppingBag,
+  Sparkles,
+  Sun,
+  Moon
 } from 'lucide-react';
