@@ -1,0 +1,18 @@
+# ملفات البيئة (لا ترفعها أبداً!)
+.env
+.env.local
+.env.production
+
+# مجلدات Node
+node_modules/
+.next/
+out/
+dist/
+
+# ملفات نظام التشغيل
+.DS_Store
+Thumbs.db
+
+# ملفات Firebase (للتطوير المحلي)
+*.log
+firebase-debug.log
