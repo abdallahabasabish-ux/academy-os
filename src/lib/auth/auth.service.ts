@@ -30,14 +30,16 @@ export interface RegisterFormData {
 }
 
 export class AuthService {
-  
+  private auth = auth;
+  private db = db;
+
   async register(data: RegisterFormData) {
-    // التحقق من صحة البيانات
+    // 1. Validate data
     const validated = registerSchema.parse(data);
     
-    // التأكد من أن اسم المستخدم غير مأخوذ
+    // 2. Check if username is available
     const slugQuery = query(
-      collection(db, 'tenants'), 
+      collection(this.db, 'tenants'), 
       where('slug', '==', validated.username.toLowerCase()), 
       limit(1)
     );
@@ -46,25 +48,25 @@ export class AuthService {
       throw new Error('اسم المستخدم هذا محجوز بالفعل، اختر اسماً آخر.');
     }
 
-    // إنشاء المستخدم في Firebase Authentication
+    // 3. Create Firebase Auth user
     const userCredential = await createUserWithEmailAndPassword(
-      auth, 
+      this.auth, 
       validated.email, 
       validated.password
     );
     const user = userCredential.user;
 
-    // تحديث الاسم الظاهر
+    // 4. Update profile
     await updateProfile(user, { displayName: validated.name });
 
-    // إرسال رابط تأكيد البريد
+    // 5. Send verification email
     await sendEmailVerification(user);
 
-    // إنشاء معرف المستأجر
+    // 6. Generate tenant ID
     const tenantId = `tenant_${uuidv4().slice(0, 8)}`;
 
-    // كتابة وثيقة المستأجر (Tenant)
-    const tenantRef = doc(db, 'tenants', tenantId);
+    // 7. Create tenant document in Firestore
+    const tenantRef = doc(this.db, 'tenants', tenantId);
     await setDoc(tenantRef, {
       id: tenantId,
       slug: validated.username.toLowerCase(),
@@ -79,15 +81,30 @@ export class AuthService {
         danger: '#EF4444',
         background: '#F8FAFC'
       },
-      fonts: { arabic: 'Cairo', english: 'Inter' },
+      fonts: {
+        arabic: 'Cairo',
+        english: 'Inter'
+      },
+      seo: {
+        title: validated.academyName,
+        description: `Learn with ${validated.academyName}`,
+        keywords: ['education', 'courses', 'learning']
+      },
+      socialLinks: {},
       status: 'active',
       plan: 'free',
+      subscription: {
+        planId: 'free',
+        startDate: serverTimestamp(),
+        endDate: null,
+        status: 'active'
+      },
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     });
 
-    // إضافة المستخدم كـ Owner داخل وثائق المستأجر
-    const userRef = doc(db, 'tenants', tenantId, 'users', user.uid);
+    // 8. Create user document in tenant
+    const userRef = doc(this.db, 'tenants', tenantId, 'users', user.uid);
     await setDoc(userRef, {
       uid: user.uid,
       email: user.email,
@@ -108,8 +125,8 @@ export class AuthService {
       joinedAt: serverTimestamp()
     });
 
-    // إنشاء سجل الموظف (Staff) للمالك
-    const staffRef = doc(db, 'tenants', tenantId, 'staff', user.uid);
+    // 9. Create staff record for owner
+    const staffRef = doc(this.db, 'tenants', tenantId, 'staff', user.uid);
     await setDoc(staffRef, {
       id: user.uid,
       userId: user.uid,
@@ -122,8 +139,8 @@ export class AuthService {
       permissions: ['*']
     });
 
-    // إنشاء صفحة رئيسية افتراضية
-    const pageRef = doc(db, 'tenants', tenantId, 'pages', 'home');
+    // 10. Create default pages
+    const pageRef = doc(this.db, 'tenants', tenantId, 'pages', 'home');
     await setDoc(pageRef, {
       slug: 'home',
       title: 'الرئيسية',
@@ -131,29 +148,46 @@ export class AuthService {
       status: 'published',
       content: {
         sections: [
-          { id: 'hero_1', type: 'hero', props: { title: `مرحباً في ${validated.academyName}`, subtitle: 'ابدأ التعلم الآن' } }
+          { 
+            id: 'hero_1', 
+            type: 'hero', 
+            props: { 
+              title: `مرحباً في ${validated.academyName}`, 
+              subtitle: 'ابدأ التعلم الآن' 
+            } 
+          }
         ]
       },
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     });
 
+    // 11. Return user data
     return { user, tenantId, slug: validated.username.toLowerCase() };
   }
 
   async login(email: string, password: string) {
     const validated = loginSchema.parse({ email, password });
-    const userCredential = await signInWithEmailAndPassword(auth, validated.email, validated.password);
+    const userCredential = await signInWithEmailAndPassword(this.auth, validated.email, validated.password);
     return userCredential.user;
   }
 
   async logout() {
-    await signOut(auth);
+    await signOut(this.auth);
+  }
+
+  async sendVerificationEmail(user: User) {
+    await sendEmailVerification(user);
+  }
+
+  async resetPassword(email: string) {
+    // We'll add this later
+    throw new Error('Not implemented yet');
   }
 
   getCurrentUser(): Promise<User | null> {
     return new Promise((resolve) => {
-      const unsubscribe = onAuthStateChanged(auth, (user) => {
+      const unsubscribe = onAuthStateChanged(this.auth, (user) => {
         unsubscribe();
         resolve(user);
       });
