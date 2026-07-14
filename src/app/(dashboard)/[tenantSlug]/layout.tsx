@@ -15,22 +15,16 @@ import {
   X,
   Home,
   GraduationCap,
-  BarChart3,
   DollarSign,
   MessageSquare,
   Calendar,
   Award,
   ShoppingBag,
   FileText,
-  Sparkles,
-  ChevronDown,
-  ChevronRight,
-  User,
-  Mail,
-  Phone,
   Globe,
-  Sun,
-  Moon
+  User,
+  ChevronDown,
+  ChevronRight
 } from 'lucide-react';
 import { authService } from '@/lib/auth/auth.service';
 import { cn } from '@/lib/utils';
@@ -38,14 +32,6 @@ import { cn } from '@/lib/utils';
 interface DashboardLayoutProps {
   children: ReactNode;
   params: { tenantSlug: string };
-}
-
-interface NavItem {
-  path: string;
-  icon: React.ComponentType<{ className?: string }>;
-  label: string;
-  badge?: number;
-  children?: NavItem[];
 }
 
 export default function DashboardLayout({ children, params }: DashboardLayoutProps) {
@@ -58,9 +44,7 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [expandedMenus, setExpandedMenus] = useState<Set<string>>(new Set());
-  const [isDarkMode, setIsDarkMode] = useState(false);
 
-  // الكشف عن حجم الشاشة
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 1024);
@@ -75,7 +59,6 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // التحقق من المصادقة
   useEffect(() => {
     if (!authLoading && !user) {
       router.push(`/${tenantSlug}/login`);
@@ -93,45 +76,21 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
   };
 
   const handleLogout = async () => {
-    try {
-      await authService.logout();
-      router.push(`/${tenantSlug}/login`);
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
+    await authService.logout();
+    router.push(`/${tenantSlug}/login`);
   };
 
-  // قائمة التنقل الرئيسية
-  const navItems: NavItem[] = [
-    { 
-      path: `/${tenantSlug}`, 
-      icon: Home, 
-      label: 'الصفحة الرئيسية' 
-    },
-    { 
-      path: `/${tenantSlug}/dashboard`, 
-      icon: LayoutDashboard, 
-      label: 'لوحة التحكم' 
-    },
-    { 
-      path: `/${tenantSlug}/courses`, 
-      icon: BookOpen, 
-      label: 'الكورسات',
-      badge: 5 
-    },
-    { 
-      path: `/${tenantSlug}/students`, 
-      icon: Users, 
-      label: 'الطلاب',
-      badge: 12 
-    },
+  const navItems = [
+    { path: `/${tenantSlug}`, icon: Home, label: 'الصفحة الرئيسية' },
+    { path: `/${tenantSlug}/dashboard`, icon: LayoutDashboard, label: 'لوحة التحكم' },
+    { path: `/${tenantSlug}/courses`, icon: BookOpen, label: 'الكورسات' },
+    { path: `/${tenantSlug}/students`, icon: Users, label: 'الطلاب' },
     { 
       path: `/${tenantSlug}/crm`, 
       icon: MessageSquare, 
       label: 'CRM',
       children: [
         { path: `/${tenantSlug}/crm/leads`, icon: User, label: 'العملاء المحتملين' },
-        { path: `/${tenantSlug}/crm/contacts`, icon: Users, label: 'جهات الاتصال' },
       ]
     },
     { 
@@ -139,44 +98,20 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
       icon: DollarSign, 
       label: 'المالية',
       children: [
-        { path: `/${tenantSlug}/erp/dashboard`, icon: BarChart3, label: 'لوحة المالية' },
-        { path: `/${tenantSlug}/erp/invoices`, icon: FileText, label: 'الفواتير' },
+        { path: `/${tenantSlug}/erp/dashboard`, icon: FileText, label: 'لوحة المالية' },
       ]
     },
-    { 
-      path: `/${tenantSlug}/exams`, 
-      icon: GraduationCap, 
-      label: 'الامتحانات' 
-    },
-    { 
-      path: `/${tenantSlug}/certificates`, 
-      icon: Award, 
-      label: 'الشهادات' 
-    },
-    { 
-      path: `/${tenantSlug}/store`, 
-      icon: ShoppingBag, 
-      label: 'المتجر' 
-    },
-    { 
-      path: `/${tenantSlug}/calendar`, 
-      icon: Calendar, 
-      label: 'التقويم' 
-    },
-    { 
-      path: `/${tenantSlug}/settings`, 
-      icon: Settings, 
-      label: 'الإعدادات' 
-    },
+    { path: `/${tenantSlug}/exams`, icon: GraduationCap, label: 'الامتحانات' },
+    { path: `/${tenantSlug}/certificates`, icon: Award, label: 'الشهادات' },
+    { path: `/${tenantSlug}/store`, icon: ShoppingBag, label: 'المتجر' },
+    { path: `/${tenantSlug}/calendar`, icon: Calendar, label: 'التقويم' },
+    { path: `/${tenantSlug}/settings`, icon: Settings, label: 'الإعدادات' },
   ];
 
   if (tenantLoading || authLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="flex flex-col items-center gap-3">
-          <div className="animate-spin w-10 h-10 border-4 border-primary border-t-transparent rounded-full"></div>
-          <p className="text-sm text-gray-500">جاري التحميل...</p>
-        </div>
+        <div className="animate-spin w-10 h-10 border-4 border-primary border-t-transparent rounded-full"></div>
       </div>
     );
   }
@@ -186,7 +121,6 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-red-600">الأكاديمية غير موجودة</h1>
-          <p className="text-gray-500 mt-2">تأكد من الرابط أو تواصل مع الدعم</p>
         </div>
       </div>
     );
@@ -196,17 +130,14 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
 
   return (
     <div className="min-h-screen bg-background" style={{ '--primary': primaryColor } as any}>
-      {/* القائمة الجانبية */}
       <aside
         className={cn(
           "fixed top-0 right-0 h-full bg-white shadow-2xl z-50 transition-all duration-300 border-l",
           isSidebarOpen ? "w-72" : "w-0 -translate-x-full",
-          "lg:translate-x-0 lg:shadow-sm lg:border-l-0 lg:border-r",
-          isMobile && isSidebarOpen ? "w-72" : ""
+          "lg:translate-x-0 lg:shadow-sm lg:border-l-0 lg:border-r"
         )}
         style={{ width: isSidebarOpen ? '288px' : '0px' }}
       >
-        {/* رأس القائمة - معلومات الأكاديمية */}
         <div className="p-4 border-b bg-gradient-to-r from-primary/5 to-transparent">
           <div className="flex items-center gap-3">
             <div 
@@ -219,47 +150,29 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
               <p className="font-semibold text-sm line-clamp-1">{tenant.name}</p>
               <p className="text-xs text-gray-400">@{tenantSlug}</p>
             </div>
-            <button
-              onClick={() => setIsSidebarOpen(false)}
-              className="p-1.5 hover:bg-gray-100 rounded-lg lg:hidden"
-            >
+            <button onClick={() => setIsSidebarOpen(false)} className="p-1.5 hover:bg-gray-100 rounded-lg lg:hidden">
               <X className="w-4 h-4" />
             </button>
           </div>
-
-          {/* حالة الأكاديمية */}
           <div className="flex items-center gap-2 mt-3 text-xs">
             <span className={`w-2 h-2 rounded-full ${tenant.status === 'active' ? 'bg-green-500' : 'bg-red-500'}`} />
-            <span className="text-gray-500">
-              {tenant.status === 'active' ? 'نشطة' : 'موقفة'}
-            </span>
-            <span className="text-gray-300">•</span>
-            <span className="text-gray-500">خطة {tenant.plan || 'مجانية'}</span>
+            <span className="text-gray-500">{tenant.status === 'active' ? 'نشطة' : 'موقفة'}</span>
           </div>
         </div>
 
-        {/* أزرار سريعة */}
         <div className="p-3 border-b">
           <div className="grid grid-cols-2 gap-2">
-            <Link
-              href={`/${tenantSlug}/courses/create`}
-              className="flex items-center justify-center gap-1.5 px-3 py-2 bg-primary/10 text-primary rounded-lg text-sm font-medium hover:bg-primary/20 transition"
-              style={{ color: primaryColor }}
-            >
+            <Link href={`/${tenantSlug}/courses/create`} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-primary/10 text-primary rounded-lg text-sm font-medium hover:bg-primary/20 transition">
               <BookOpen className="w-3.5 h-3.5" />
               كورس جديد
             </Link>
-            <Link
-              href={`/${tenantSlug}`}
-              className="flex items-center justify-center gap-1.5 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition"
-            >
+            <Link href={`/${tenantSlug}`} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition">
               <Globe className="w-3.5 h-3.5" />
               معاينة
             </Link>
           </div>
         </div>
 
-        {/* قائمة التنقل */}
         <nav className="p-3 space-y-0.5 overflow-y-auto" style={{ height: 'calc(100% - 180px)' }}>
           {navItems.map((item) => {
             const isActive = pathname === item.path || pathname.startsWith(item.path + '/');
@@ -269,53 +182,21 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
             if (hasChildren) {
               return (
                 <div key={item.path} className="mb-1">
-                  <button
-                    onClick={() => toggleMenu(item.path)}
-                    className={cn(
-                      "flex items-center justify-between w-full px-3 py-2.5 rounded-lg transition text-sm",
-                      isActive 
-                        ? 'bg-primary/10 text-primary font-medium' 
-                        : 'hover:bg-gray-100 text-gray-700'
-                    )}
-                  >
+                  <button onClick={() => toggleMenu(item.path)} className={cn("flex items-center justify-between w-full px-3 py-2.5 rounded-lg transition text-sm", isActive ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-gray-100 text-gray-700')}>
                     <div className="flex items-center gap-3">
                       <item.icon className={cn("w-4 h-4", isActive ? 'text-primary' : 'text-gray-400')} />
                       <span>{item.label}</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      {item.badge && (
-                        <span className="px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full">
-                          {item.badge}
-                        </span>
-                      )}
-                      {isExpanded ? (
-                        <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
-                      ) : (
-                        <ChevronRight className="w-3.5 h-3.5 text-gray-400" />
-                      )}
-                    </div>
+                    {isExpanded ? <ChevronDown className="w-3.5 h-3.5 text-gray-400" /> : <ChevronRight className="w-3.5 h-3.5 text-gray-400" />}
                   </button>
-                  
                   {isExpanded && (
                     <div className="mr-4 pr-2 border-r-2 border-gray-100 space-y-0.5 mt-0.5">
-                      {item.children.map((child) => {
-                        const isChildActive = pathname === child.path;
-                        return (
-                          <Link
-                            key={child.path}
-                            href={child.path}
-                            className={cn(
-                              "flex items-center gap-3 px-3 py-2 rounded-lg transition text-sm",
-                              isChildActive
-                                ? 'bg-primary/5 text-primary font-medium'
-                                : 'hover:bg-gray-50 text-gray-600'
-                            )}
-                          >
-                            <child.icon className="w-3.5 h-3.5 text-gray-400" />
-                            <span>{child.label}</span>
-                          </Link>
-                        );
-                      })}
+                      {item.children.map((child) => (
+                        <Link key={child.path} href={child.path} className={cn("flex items-center gap-3 px-3 py-2 rounded-lg transition text-sm", pathname === child.path ? 'bg-primary/5 text-primary font-medium' : 'hover:bg-gray-50 text-gray-600')}>
+                          <child.icon className="w-3.5 h-3.5 text-gray-400" />
+                          <span>{child.label}</span>
+                        </Link>
+                      ))}
                     </div>
                   )}
                 </div>
@@ -323,29 +204,14 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
             }
 
             return (
-              <Link
-                key={item.path}
-                href={item.path}
-                className={cn(
-                  "flex items-center gap-3 px-3 py-2.5 rounded-lg transition text-sm",
-                  isActive 
-                    ? 'bg-primary/10 text-primary font-medium' 
-                    : 'hover:bg-gray-100 text-gray-700'
-                )}
-              >
+              <Link key={item.path} href={item.path} className={cn("flex items-center gap-3 px-3 py-2.5 rounded-lg transition text-sm", isActive ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-gray-100 text-gray-700')}>
                 <item.icon className={cn("w-4 h-4", isActive ? 'text-primary' : 'text-gray-400')} />
                 <span className="flex-1">{item.label}</span>
-                {item.badge && (
-                  <span className="px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full">
-                    {item.badge}
-                  </span>
-                )}
               </Link>
             );
           })}
         </nav>
 
-        {/* أسفل القائمة */}
         <div className="absolute bottom-0 w-full p-3 border-t bg-gray-50/50">
           <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white shadow-sm">
             <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
@@ -355,37 +221,21 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
               <p className="text-xs font-medium line-clamp-1">{user?.displayName || 'مستخدم'}</p>
               <p className="text-xs text-gray-400 line-clamp-1">{user?.email}</p>
             </div>
-            <button
-              onClick={handleLogout}
-              className="p-1.5 hover:bg-red-50 text-red-500 rounded-lg transition"
-              title="تسجيل الخروج"
-            >
+            <button onClick={handleLogout} className="p-1.5 hover:bg-red-50 text-red-500 rounded-lg transition">
               <LogOut className="w-4 h-4" />
             </button>
           </div>
         </div>
       </aside>
 
-      {/* خلفية مظللة للموبايل */}
       {isMobile && isSidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/30 z-40"
-          onClick={() => setIsSidebarOpen(false)}
-        />
+        <div className="fixed inset-0 bg-black/30 z-40" onClick={() => setIsSidebarOpen(false)} />
       )}
 
-      {/* المحتوى الرئيسي */}
-      <main className={cn(
-        "transition-all duration-300 min-h-screen",
-        isSidebarOpen ? "lg:mr-72" : "lg:mr-0"
-      )}>
-        {/* شريط العلوي */}
+      <main className={cn("transition-all duration-300 min-h-screen", isSidebarOpen ? "lg:mr-72" : "lg:mr-0")}>
         <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="p-2 hover:bg-gray-100 rounded-lg transition"
-            >
+            <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-2 hover:bg-gray-100 rounded-lg transition">
               {isSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
             <div className="flex items-center gap-2 text-sm text-gray-500">
@@ -396,33 +246,14 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
               </span>
             </div>
           </div>
-
           <div className="flex items-center gap-2">
-            {/* زر الوضع الداكن (سيكون جاهزاً لاحقاً) */}
-            <button
-              onClick={() => setIsDarkMode(!isDarkMode)}
-              className="p-2 hover:bg-gray-100 rounded-lg transition text-gray-500"
-            >
-              {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-            </button>
-
-            {/* رابط المعاينة */}
-            <Link
-              href={`/${tenantSlug}`}
-              target="_blank"
-              className="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition"
-              style={{ color: primaryColor }}
-            >
+            <Link href={`/${tenantSlug}`} target="_blank" className="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition">
               <Globe className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">معاينة</span>
             </Link>
           </div>
         </header>
-
-        {/* المحتوى */}
-        <div className="p-4">
-          {children}
-        </div>
+        <div className="p-4">{children}</div>
       </main>
     </div>
   );
