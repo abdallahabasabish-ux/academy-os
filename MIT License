@@ -1,0 +1,41 @@
+#### `storage.rules`
+rules_version = '2';
+service firebase.storage {
+match /b/{bucket}/o {
+match /{allPaths=**} {
+allow read: if true;
+allow write: if request.auth != null;
+}
+}
+}
+
+#### `tailwind.config.js`
+```javascript
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  darkMode: ["class"],
+  content: [
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  theme: {
+    extend: {
+      colors: {
+        background: '#F8FAFC',
+        foreground: '#0F172A',
+        primary: '#2563EB',
+        secondary: '#0F172A',
+        success: '#22C55E',
+        warning: '#F59E0B',
+        danger: '#EF4444',
+      },
+      fontFamily: {
+        sans: ['var(--font-inter)', 'var(--font-cairo)', 'system-ui', 'sans-serif'],
+        arabic: ['var(--font-cairo)'],
+        english: ['var(--font-inter)'],
+      },
+    },
+  },
+  plugins: [],
+};
