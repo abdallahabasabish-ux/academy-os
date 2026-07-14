@@ -18,7 +18,7 @@ export default function LoginPage() {
     setError('');
     try {
       const user = await authService.login(email, password);
-      // بعد الدخول، نوجه مؤقتاً إلى /dashboard
+      // Get tenant slug from user metadata or redirect to dashboard
       router.push('/dashboard');
     } catch (err: any) {
       setError('البريد الإلكتروني أو كلمة المرور غير صحيحة');
